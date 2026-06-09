@@ -1,0 +1,12 @@
+/* App.css - Component-level base styles */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-dark);
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 80px;
+}
