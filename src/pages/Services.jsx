@@ -163,13 +163,13 @@ export default function Services() {
         </div>
       </section>
 
-      {/* WHY BILLZ SERVICES */}
+      {/* WHY FERGUSON SERVICES */}
       <section className="section services-why-section">
         <div className="services-why__bg" />
         <div className="container">
           <Reveal className="section-header">
             <div className="section-tag">Why Choose Us</div>
-            <h2 className="section-title">The <span className="highlight">BILLZ</span> Service Promise</h2>
+            <h2 className="section-title">The <span className="highlight">Ferguson</span> Service Promise</h2>
           </Reveal>
           <div className="services-why-grid">
             {[

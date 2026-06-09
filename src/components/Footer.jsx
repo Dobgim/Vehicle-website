@@ -86,7 +86,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <p className="footer__copyright">
-            © {new Date().getFullYear()} <span className="footer__logo-accent">BILLZ</span> Autos. All rights reserved.
+            © {new Date().getFullYear()} <span className="footer__logo-accent">Ferguson</span> Autos. All rights reserved.
           </p>
           <div className="footer__bottom-links">
             <a href="#" className="footer__bottom-link">Privacy Policy</a>

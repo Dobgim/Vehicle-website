@@ -69,7 +69,7 @@ export default function About() {
         <div className="about__hero-orb" />
         <div className="container about__hero-content">
           <div className="section-tag">Our Story</div>
-          <h1 className="page-hero-title">About <span className="highlight">BILLZ</span> Autos</h1>
+          <h1 className="page-hero-title">About <span className="highlight">Ferguson</span> Autos</h1>
           <p className="page-hero-subtitle">15 years of passion, precision, and premium automotive experiences.</p>
         </div>
       </section>

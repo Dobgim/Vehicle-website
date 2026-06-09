@@ -191,7 +191,7 @@ export default function Home() {
         <div className="container">
           <RevealDiv className="section-header">
             <div className="section-tag">Why Ferguson</div>
-            <h2 className="section-title">The <span className="highlight">BILLZ</span> Difference</h2>
+            <h2 className="section-title">The <span className="highlight">Ferguson</span> Difference</h2>
             <p className="section-subtitle">We don't just sell cars — we deliver an unmatched automotive experience.</p>
           </RevealDiv>
           <div className="features-grid">
