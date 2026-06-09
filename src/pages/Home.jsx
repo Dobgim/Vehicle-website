@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useCart } from '../App'
 import { FiArrowRight, FiPlay, FiStar, FiChevronLeft, FiChevronRight, FiZap, FiShield, FiAward, FiHeadphones, FiCheck } from '../components/Icons'
-import { cars, stats, testimonials } from '../data/cars'
+import { useCarStore } from '../context/CarStore'
+import { stats, testimonials } from '../data/cars'
 import heroImg from '../assets/cars/hero_car.png'
 import lamborghiniImg from '../assets/cars/car_lamborghini.png'
 import porscheImg from '../assets/cars/car_porsche.png'
@@ -50,6 +51,7 @@ function StatCounter({ target }) {
 }
 
 export default function Home() {
+  const { cars } = useCarStore()
   const [activeTest, setActiveTest] = useState(0)
   const [added, setAdded] = useState({})
   const { addToCart } = useCart()
@@ -150,7 +152,7 @@ export default function Home() {
                   </div>
                   <div className="car-card__footer">
                     <div>
-                      <span className="car-card__price">${car.price.toLocaleString()}</span>
+                      <span className="car-card__price">£{car.price.toLocaleString()}</span>
                       <div className="car-card__rating">
                         <FiStar className="car-card__star" /><span>{car.rating}</span>
                         <span className="car-card__reviews">({car.reviews})</span>

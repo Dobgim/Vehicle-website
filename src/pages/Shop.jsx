@@ -1,15 +1,16 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import { useCart } from '../App'
 import { FiSearch, FiFilter, FiStar, FiZap, FiShoppingCart, FiCheck } from '../components/Icons'
-import { cars, brands, types } from '../data/cars'
+import { useCarStore } from '../context/CarStore'
+import { brands, types } from '../data/cars'
 import heroBgImg from '../assets/cars/car_porsche.png'
 import './Shop.css'
 
 const priceRanges = [
   { label: 'All Prices', min: 0, max: Infinity },
-  { label: 'Under $100K', min: 0, max: 100000 },
-  { label: '$100K – $200K', min: 100000, max: 200000 },
-  { label: '$200K+', min: 200000, max: Infinity },
+  { label: 'Under £100K', min: 0, max: 100000 },
+  { label: '£100K – £200K', min: 100000, max: 200000 },
+  { label: '£200K+', min: 200000, max: Infinity },
 ]
 
 function useReveal() {
@@ -54,7 +55,7 @@ function ShopCard({ car, onAdd, added, index }) {
         </div>
         <div className="shop-card__footer">
           <div className="shop-card__price-wrap">
-            <span className="shop-card__price">${car.price.toLocaleString()}</span>
+            <span className="shop-card__price">£{car.price.toLocaleString()}</span>
             <div className="shop-card__rating">
               <FiStar className="shop-card__star" /><span>{car.rating}</span>
               <span className="shop-card__reviews">({car.reviews} reviews)</span>
@@ -70,6 +71,7 @@ function ShopCard({ car, onAdd, added, index }) {
 }
 
 export default function Shop() {
+  const { cars } = useCarStore()
   const [search, setSearch] = useState('')
   const [activeBrand, setActiveBrand] = useState('All')
   const [activeType, setActiveType] = useState('All')
@@ -97,7 +99,7 @@ export default function Shop() {
     else if (sortBy === 'rating') result.sort((a, b) => b.rating - a.rating)
     else if (sortBy === 'power') result.sort((a, b) => parseInt(b.power) - parseInt(a.power))
     return result
-  }, [search, activeBrand, activeType, priceRange, sortBy])
+  }, [cars, search, activeBrand, activeType, priceRange, sortBy])
 
   const resetFilters = () => { setActiveBrand('All'); setActiveType('All'); setPriceRange(0); setSearch(''); setSortBy('default') }
 

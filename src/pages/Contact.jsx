@@ -4,17 +4,17 @@ import heroBgImg from '../assets/cars/car_bmw.png'
 import './Contact.css'
 
 const contactInfo = [
-  { icon: <FiMapPin />, label: 'Our Location', value: '123 Motor Drive, Victoria Island', sub: 'Lagos, Nigeria', color: '#e50914' },
-  { icon: <FiPhone />, label: 'Phone Number', value: '+234 800 FERGUSON', sub: '+234 801 234 5678', color: '#f5c518' },
+  { icon: <FiMapPin />, label: 'Our Location', value: '45 Regent Street, Mayfair', sub: 'London, United Kingdom', color: '#e50914' },
+  { icon: <FiPhone />, label: 'Phone Number', value: '+44 7823 637286', sub: 'Mon–Sat: 8am – 8pm', color: '#f5c518' },
   { icon: <FiMail />, label: 'Email Address', value: 'info@fergusonautosales.com', sub: 'sales@fergusonautosales.com', color: '#1e50ff' },
   { icon: <FiClock />, label: 'Working Hours', value: 'Mon – Sat: 8am – 8pm', sub: 'Sun: 10am – 5pm', color: '#00b894' },
 ]
 
 const faqs = [
-  { q: 'Do you offer test drives?', a: 'Absolutely! We offer complimentary test drives for all vehicles in our showroom. Book online or call us to schedule your session.' },
+  { q: 'Do you offer test drives?', a: 'Absolutely! We offer complimentary test drives for all vehicles in our showroom. Book online or call us to schedule your session at our London showroom.' },
   { q: 'Can I trade in my current vehicle?', a: 'Yes! We accept trade-ins for all makes and models. Our appraisal team will give you a fair market value for your car.' },
-  { q: 'Do you offer financing options?', a: 'We partner with leading banks to offer competitive financing with flexible repayment plans tailored to your budget.' },
-  { q: 'Do you deliver outside Lagos?', a: 'Yes, we deliver nationwide across Nigeria and select West African countries. Delivery fees vary by location.' },
+  { q: 'Do you offer financing options?', a: 'We partner with leading UK banks and finance providers to offer competitive PCP, HP, and personal loan options tailored to your budget.' },
+  { q: 'Do you deliver across the UK?', a: 'Yes, we offer nationwide delivery across the UK and can arrange shipping across Europe. Delivery fees vary by location — contact us for a quote.' },
 ]
 
 export default function Contact() {
@@ -110,7 +110,7 @@ export default function Contact() {
                   <div className="contact-form__row">
                     <div className="form-group">
                       <label>Phone Number</label>
-                      <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+234 800 000 0000" />
+                      <input name="phone" type="tel" value={form.phone} onChange={handleChange} placeholder="+44 7000 000000" />
                     </div>
                     <div className={`form-group ${errors.subject ? 'form-group--error' : ''}`}>
                       <label>Subject *</label>
@@ -143,16 +143,16 @@ export default function Contact() {
               <div className="contact__map glass-card">
                 <div className="contact__map-inner">
                   <div className="contact__map-pin">📍</div>
-                  <p className="contact__map-label">123 Motor Drive, Victoria Island</p>
-                  <p className="contact__map-sub">Lagos, Nigeria</p>
-                  <a href="https://maps.google.com" target="_blank" rel="noreferrer" className="btn btn-outline contact__map-btn">Open in Google Maps</a>
+                  <p className="contact__map-label">45 Regent Street, Mayfair</p>
+                  <p className="contact__map-sub">London, United Kingdom</p>
+                  <a href="https://maps.google.com/?q=45+Regent+Street+London" target="_blank" rel="noreferrer" className="btn btn-outline contact__map-btn">Open in Google Maps</a>
                 </div>
                 <div className="contact__map-grid">{Array(48).fill(0).map((_, i) => <div key={i} className="contact__map-cell" />)}</div>
               </div>
               <div className="contact__socials glass-card">
                 <h3 className="contact__socials-title"><FiMessageSquare /> Live Chat Available</h3>
                 <p className="contact__socials-desc">Chat with our sales team on WhatsApp for instant assistance.</p>
-                <a href="https://wa.me/2348012345678" className="btn btn-gold contact__whatsapp-btn" target="_blank" rel="noreferrer">💬 Chat on WhatsApp</a>
+                <a href="https://wa.me/447823637286?text=Hello%20Ferguson%20Auto%20Sales!%20I%20have%20some%20questions%20about%20your%20vehicles." className="btn btn-gold contact__whatsapp-btn" target="_blank" rel="noreferrer">💬 Chat on WhatsApp</a>
               </div>
             </div>
           </div>

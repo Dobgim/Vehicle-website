@@ -77,8 +77,8 @@ export default function Footer() {
           <div className="footer__col">
             <h4 className="footer__col-title">Contact</h4>
             <ul className="footer__contact-list">
-              <li><FiMapPin className="footer__contact-icon" /><span>123 Motor Drive, Lagos, Nigeria</span></li>
-              <li><FiPhone className="footer__contact-icon" /><span>+234 800 FERGUSON</span></li>
+              <li><FiMapPin className="footer__contact-icon" /><span>45 Regent Street, London, UK</span></li>
+              <li><FiPhone className="footer__contact-icon" /><span>+44 7823 637286</span></li>
               <li><FiMail className="footer__contact-icon" /><span>info@fergusonautosales.com</span></li>
             </ul>
           </div>
@@ -89,6 +89,7 @@ export default function Footer() {
             © {new Date().getFullYear()} <span className="footer__logo-accent">Ferguson</span> Autos. All rights reserved.
           </p>
           <div className="footer__bottom-links">
+            <a href="#/admin" className="footer__bottom-link">🔐 Admin Portal</a>
             <a href="#" className="footer__bottom-link">Privacy Policy</a>
             <a href="#" className="footer__bottom-link">Terms of Service</a>
           </div>

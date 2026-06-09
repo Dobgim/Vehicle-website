@@ -18,12 +18,12 @@ export default function Cart() {
     const number = '447823637286'
     let message = `Hello, I'd like to place an order from Ferguson Autos:\n\n`
     items.forEach(item => {
-      message += `• *${item.name}* (Qty: ${item.qty}) - $${(item.price * item.qty).toLocaleString()}\n`
+      message += `• *${item.name}* (Qty: ${item.qty}) - £${(item.price * item.qty).toLocaleString()}\n`
     })
-    message += `\n*Subtotal:* $${totalPrice.toLocaleString()}`
-    message += `\n*Tax (7.5%):* $${tax.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
-    message += `\n*Delivery:* $${shipping.toLocaleString()}`
-    message += `\n*Total Order Amount:* $${grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}\n\n`
+    message += `\n*Subtotal:* £${totalPrice.toLocaleString()}`
+    message += `\n*Tax (7.5%):* £${tax.toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+    message += `\n*Delivery:* £${shipping.toLocaleString()}`
+    message += `\n*Total Order Amount:* £${grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}\n\n`
     message += `Please confirm availability and instructions for final payment and delivery.`
 
     const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`
@@ -58,7 +58,7 @@ export default function Cart() {
           <p className="cart__success-desc">Thank you for your order! We have redirected you to WhatsApp to finalize the delivery and payment details.</p>
           <div className="cart__success-details glass-card">
             <div className="cart__success-detail"><span>Order ID</span><strong>{orderId}</strong></div>
-            <div className="cart__success-detail"><span>Total Value</span><strong>${grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong></div>
+            <div className="cart__success-detail"><span>Total Value</span><strong>£{grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}</strong></div>
             <div className="cart__success-detail"><span>Expected Delivery</span><strong>5–10 Business Days</strong></div>
           </div>
           <button className="btn btn-primary" onClick={() => navigate('#/shop')}>Continue Shopping <FiArrowRight /></button>
@@ -106,7 +106,7 @@ export default function Cart() {
                       <button className="cart-item__qty-btn" onClick={() => updateQty(item.id, item.qty + 1)}><FiPlus /></button>
                     </div>
                     <div className="cart-item__right">
-                      <span className="cart-item__price">${(item.price * item.qty).toLocaleString()}</span>
+                      <span className="cart-item__price">£{(item.price * item.qty).toLocaleString()}</span>
                       <button className="cart-item__remove" onClick={() => removeFromCart(item.id)}><FiTrash2 /></button>
                     </div>
                   </div>
@@ -125,16 +125,16 @@ export default function Cart() {
               {items.map(item => (
                 <div key={item.id} className="cart__summary-item">
                   <span className="cart__summary-item-name">{item.name} <span className="cart__summary-item-qty">×{item.qty}</span></span>
-                  <span className="cart__summary-item-price">${(item.price * item.qty).toLocaleString()}</span>
+                  <span className="cart__summary-item-price">£{(item.price * item.qty).toLocaleString()}</span>
                 </div>
               ))}
             </div>
             <div className="cart__summary-divider" />
-            <div className="cart__summary-line"><span>Subtotal</span><span>${totalPrice.toLocaleString()}</span></div>
-            <div className="cart__summary-line"><span>Tax (7.5%)</span><span>${tax.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span></div>
-            <div className="cart__summary-line"><span className="cart__summary-delivery"><FiTruck /> Delivery</span><span>${shipping.toLocaleString()}</span></div>
+            <div className="cart__summary-line"><span>Subtotal</span><span>£{totalPrice.toLocaleString()}</span></div>
+            <div className="cart__summary-line"><span>Tax (7.5%)</span><span>£{tax.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span></div>
+            <div className="cart__summary-line"><span className="cart__summary-delivery"><FiTruck /> Delivery</span><span>£{shipping.toLocaleString()}</span></div>
             <div className="cart__summary-divider" />
-            <div className="cart__summary-total"><span>Total</span><span>${grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span></div>
+            <div className="cart__summary-total"><span>Total</span><span>£{grand.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span></div>
             {step === 0 && (
               <button className="btn btn-primary cart__checkout-btn" onClick={handleWhatsAppCheckout}>
                 Proceed to Checkout <FiArrowRight />

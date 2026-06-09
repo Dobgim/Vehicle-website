@@ -1,0 +1,220 @@
+/* ===== ADMIN LOGIN ===== */
+.al-root {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #080810;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+}
+
+.al-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.al-bg-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.18;
+}
+
+.al-bg-orb--1 {
+  width: 500px; height: 500px;
+  background: #e50914;
+  top: -100px; left: -100px;
+}
+
+.al-bg-orb--2 {
+  width: 400px; height: 400px;
+  background: #f5c518;
+  bottom: -80px; right: -80px;
+}
+
+.al-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.al-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 20px;
+  padding: 44px 40px 32px;
+  width: 100%;
+  max-width: 420px;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(229,9,20,0.1);
+}
+
+.al-card__header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.al-logo {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  object-fit: cover;
+  margin-bottom: 14px;
+  border: 2px solid rgba(229,9,20,0.4);
+}
+
+.al-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 6px;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+}
+
+.al-subtitle {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  margin: 0;
+}
+
+.al-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.al-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.al-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.al-input-icon {
+  position: absolute;
+  left: 14px;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.al-input {
+  width: 100%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 10px;
+  padding: 13px 44px 13px 42px;
+  color: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.al-input:focus {
+  border-color: #e50914;
+  background: rgba(229,9,20,0.06);
+}
+
+.al-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.al-eye {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 4px;
+  line-height: 1;
+  color: rgba(255,255,255,0.5);
+}
+
+.al-error {
+  background: rgba(229,9,20,0.12);
+  border: 1px solid rgba(229,9,20,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #ff6b6b;
+}
+
+.al-btn {
+  background: linear-gradient(135deg, #e50914 0%, #b8070f 100%);
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.al-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+.al-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.al-spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: al-spin 0.7s linear infinite;
+  display: inline-block;
+}
+@keyframes al-spin { to { transform: rotate(360deg); } }
+
+.al-hint {
+  margin-top: 24px;
+  padding: 12px 16px;
+  background: rgba(245,197,24,0.06);
+  border: 1px solid rgba(245,197,24,0.15);
+  border-radius: 8px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+  text-align: center;
+}
+
+.al-hint p { margin: 0 0 6px; }
+.al-hint code {
+  display: block;
+  font-family: 'Courier New', monospace;
+  color: #f5c518;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+}
+
+.al-back {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
+  color: rgba(255,255,255,0.4);
+  font-size: 13px;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.al-back:hover { color: #e50914; }
