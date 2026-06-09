@@ -95,7 +95,7 @@ export default function AdminSettings({ auth }) {
             </div>
             <div className="adm-form-field" style={{ marginTop: 16 }}>
               <label>Address</label>
-              <textarea defaultValue="45 Regent Street, Mayfair, London, United Kingdom" rows={2}
+              <textarea defaultValue="1 Barn Church Road, Culloden, Inverness, IV2 7WB" rows={2}
                 style={{ width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)', borderRadius: 8, padding: '10px 12px', color: '#fff', fontFamily: 'inherit', fontSize: 13.5, outline: 'none', boxSizing: 'border-box' }} />
             </div>
             <div className="adm-form-grid" style={{ marginTop: 16 }}>

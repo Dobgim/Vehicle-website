@@ -1,32 +1,22 @@
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const revenue =   [48, 62, 71, 88, 95, 112, 104, 138, 121, 145, 132, 168]
-const unitsSold = [2,  3,  3,  4,  4,  5,   5,   6,   5,   7,   6,   8  ]
-const maxRev = Math.max(...revenue)
-const maxUnits = Math.max(...unitsSold)
+const revenue =   [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const unitsSold = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const maxRev = 1
+const maxUnits = 1
 
-const topVehicles = [
-  { name: '2024 Porsche Cayenne Turbo', sales: 8, revenue: '£713,600', pct: 92 },
-  { name: '2023 BMW M5 Competition',    sales: 6, revenue: '£411,000', pct: 74 },
-  { name: '2023 Bentley Bentayga EWB',  sales: 4, revenue: '£696,000', pct: 58 },
-  { name: '2023 Audi RS Q8',            sales: 5, revenue: '£482,000', pct: 65 },
-  { name: '2022 Tesla Model S Plaid',   sales: 7, revenue: '£616,000', pct: 82 },
-]
+const topVehicles = []
 
 const trafficSources = [
-  { label: 'Direct / Website',  pct: 38, color: '#e50914' },
-  { label: 'Google Search',     pct: 27, color: '#f5c518' },
-  { label: 'WhatsApp Referral', pct: 18, color: '#00b894' },
-  { label: 'Social Media',      pct: 12, color: '#a29bfe' },
-  { label: 'Other',             pct: 5,  color: '#636e72' },
+  { label: 'Direct / Website',  pct: 100, color: 'rgba(255,255,255,0.1)' },
 ]
 
 const kpis = [
-  { label: 'Total Revenue (YTD)',      value: '£1.284M', change: '+22%', up: true,  icon: '💷', color: '#00b894' },
-  { label: 'Vehicles Sold (YTD)',      value: '58',      change: '+14%', up: true,  icon: '🚗', color: '#e50914' },
-  { label: 'Avg. Sale Price',          value: '£22.1K',  change: '+6%',  up: true,  icon: '📊', color: '#f5c518' },
-  { label: 'Conversion Rate',          value: '3.4%',    change: '-0.2%',up: false, icon: '🎯', color: '#a29bfe' },
-  { label: 'Customer Satisfaction',    value: '4.8 / 5', change: '+0.2', up: true,  icon: '⭐', color: '#fd79a8' },
-  { label: 'Return Customers',         value: '34%',     change: '+8%',  up: true,  icon: '🔄', color: '#1e50ff' },
+  { label: 'Total Revenue (YTD)',      value: '£0', change: '0%', up: true,  icon: '💷', color: '#00b894' },
+  { label: 'Vehicles Sold (YTD)',      value: '0',      change: '0%', up: true,  icon: '🚗', color: '#e50914' },
+  { label: 'Avg. Sale Price',          value: '£0',  change: '0%',  up: true,  icon: '📊', color: '#f5c518' },
+  { label: 'Conversion Rate',          value: '0.0%',    change: '0%', up: true, icon: '🎯', color: '#a29bfe' },
+  { label: 'Customer Satisfaction',    value: '0.0 / 5', change: '0', up: true,  icon: '⭐', color: '#fd79a8' },
+  { label: 'Return Customers',         value: '0%',     change: '0%',  up: true,  icon: '🔄', color: '#1e50ff' },
 ]
 
 export default function AdminAnalytics() {
@@ -156,9 +146,9 @@ export default function AdminAnalytics() {
             <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.07)' }}>
               <div style={{ fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase', letterSpacing: '0.6px', marginBottom: 12 }}>Monthly Targets</div>
               {[
-                { label: 'Revenue Target', current: 112, target: 130, unit: '£K' },
-                { label: 'Units Sold', current: 5, target: 8, unit: '' },
-                { label: 'New Customers', current: 24, target: 30, unit: '' },
+                { label: 'Revenue Target', current: 0, target: 130, unit: '£K' },
+                { label: 'Units Sold', current: 0, target: 8, unit: '' },
+                { label: 'New Customers', current: 0, target: 30, unit: '' },
               ].map((t, i) => (
                 <div key={i} style={{ marginBottom: 12 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>

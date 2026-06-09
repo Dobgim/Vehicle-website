@@ -1,12 +1,6 @@
 import { useState } from 'react'
 
-const initialMessages = [
-  { id: 1, name: 'James Harrison', email: 'james@email.com', subject: 'Vehicle Inquiry', message: 'I am very interested in the 2023 BMW M5. Can you arrange a test drive for this Saturday? Also, is there any flexibility on the price?', time: '10:42 AM', date: '09 Jun 2026', read: false, replied: false, tag: 'Inquiry' },
-  { id: 2, name: 'Sarah Mitchell', email: 'sarah@email.com', subject: 'Test Drive Booking', message: 'Hello, I would like to book a test drive for the Mercedes GLE 450 at your earliest convenience. I am available Mon-Wed mornings.', time: '9:15 AM', date: '09 Jun 2026', read: false, replied: false, tag: 'Test Drive' },
-  { id: 3, name: 'David Okafor', email: 'david@email.com', subject: 'Financing & Payment', message: 'Good morning! I am interested in PCP finance on the Porsche Cayenne. Could you send over the finance details and monthly payment breakdown?', time: 'Yesterday', date: '08 Jun 2026', read: true, replied: true, tag: 'Finance' },
-  { id: 4, name: 'Emma Thompson', email: 'emma@email.com', subject: 'Trade-In Valuation', message: 'I currently own a 2020 Audi A6 (32,000 miles, full service history) and would like a trade-in valuation before purchasing the Q7.', time: 'Yesterday', date: '08 Jun 2026', read: true, replied: false, tag: 'Trade-In' },
-  { id: 5, name: 'Priya Sharma', email: 'priya@email.com', subject: 'General Inquiry', message: 'Hi, I saw your listing for the Tesla Model S Plaid. Does it come with a full UK warranty? Also, what charging options are available?', time: '07 Jun', date: '07 Jun 2026', read: true, replied: true, tag: 'General' },
-]
+const initialMessages = []
 
 const tagColors = { Inquiry: 'blue', 'Test Drive': 'green', Finance: 'yellow', 'Trade-In': 'red', General: 'gray' }
 

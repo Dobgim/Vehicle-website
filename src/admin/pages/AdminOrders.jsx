@@ -1,14 +1,6 @@
 import { useState } from 'react'
 
-const initialOrders = [
-  { id: 'ORD-001', customer: 'James Harrison', email: 'james@email.com', car: '2023 BMW M5 Competition', amount: 68500, status: 'Confirmed', date: '09 Jun 2026', payment: 'Bank Transfer', phone: '+44 7700 900123' },
-  { id: 'ORD-002', customer: 'Sarah Mitchell', email: 'sarah@email.com', car: '2022 Mercedes-Benz GLE 450', amount: 52000, status: 'Pending', date: '09 Jun 2026', payment: 'Finance', phone: '+44 7700 900456' },
-  { id: 'ORD-003', customer: 'David Okafor', email: 'david@email.com', car: '2024 Porsche Cayenne Turbo', amount: 89200, status: 'Processing', date: '08 Jun 2026', payment: 'Bank Transfer', phone: '+44 7700 900789' },
-  { id: 'ORD-004', customer: 'Emma Thompson', email: 'emma@email.com', car: '2023 Audi RS Q8', amount: 96400, status: 'Delivered', date: '07 Jun 2026', payment: 'Cash', phone: '+44 7700 900321' },
-  { id: 'ORD-005', customer: 'Mark Wilson', email: 'mark@email.com', car: '2022 Land Rover Defender 110', amount: 55400, status: 'Confirmed', date: '06 Jun 2026', payment: 'Finance', phone: '+44 7700 900654' },
-  { id: 'ORD-006', customer: 'Priya Sharma', email: 'priya@email.com', car: '2022 Tesla Model S Plaid', amount: 88000, status: 'Pending', date: '05 Jun 2026', payment: 'Bank Transfer', phone: '+44 7700 900987' },
-  { id: 'ORD-007', customer: 'Chris Brown', email: 'chris@email.com', car: '2023 Bentley Bentayga EWB', amount: 174000, status: 'Delivered', date: '03 Jun 2026', payment: 'Cash', phone: '+44 7700 900111' },
-]
+const initialOrders = []
 
 const STATUS_OPTIONS = ['All', 'Confirmed', 'Pending', 'Processing', 'Delivered', 'Cancelled']
 

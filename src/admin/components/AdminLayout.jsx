@@ -12,9 +12,9 @@ import './AdminLayout.css'
 const NAV = [
   { id: 'dashboard',  label: 'Dashboard',   icon: '📊', badge: null },
   { id: 'inventory',  label: 'Inventory',    icon: '🚗', badge: null },
-  { id: 'orders',     label: 'Orders',       icon: '📦', badge: '3' },
+  { id: 'orders',     label: 'Orders',       icon: '📦', badge: null },
   { id: 'customers',  label: 'Customers',    icon: '👥', badge: null },
-  { id: 'messages',   label: 'Messages',     icon: '💬', badge: '5' },
+  { id: 'messages',   label: 'Messages',     icon: '💬', badge: null },
   { id: 'analytics',  label: 'Analytics',    icon: '📈', badge: null },
   { id: 'settings',   label: 'Settings',     icon: '⚙️',  badge: null },
 ]

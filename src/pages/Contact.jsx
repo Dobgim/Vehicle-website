@@ -4,7 +4,7 @@ import heroBgImg from '../assets/cars/car_bmw.png'
 import './Contact.css'
 
 const contactInfo = [
-  { icon: <FiMapPin />, label: 'Our Location', value: '45 Regent Street, Mayfair', sub: 'London, United Kingdom', color: '#e50914' },
+  { icon: <FiMapPin />, label: 'Our Location', value: '1 Barn Church Road, Culloden', sub: 'Inverness, IV2 7WB', color: '#e50914' },
   { icon: <FiPhone />, label: 'Phone Number', value: '+44 7823 637286', sub: 'Mon–Sat: 8am – 8pm', color: '#f5c518' },
   { icon: <FiMail />, label: 'Email Address', value: 'info@fergusonautosales.com', sub: 'sales@fergusonautosales.com', color: '#1e50ff' },
   { icon: <FiClock />, label: 'Working Hours', value: 'Mon – Sat: 8am – 8pm', sub: 'Sun: 10am – 5pm', color: '#00b894' },
@@ -143,9 +143,9 @@ export default function Contact() {
               <div className="contact__map glass-card">
                 <div className="contact__map-inner">
                   <div className="contact__map-pin">📍</div>
-                  <p className="contact__map-label">45 Regent Street, Mayfair</p>
-                  <p className="contact__map-sub">London, United Kingdom</p>
-                  <a href="https://maps.google.com/?q=45+Regent+Street+London" target="_blank" rel="noreferrer" className="btn btn-outline contact__map-btn">Open in Google Maps</a>
+                  <p className="contact__map-label">1 Barn Church Road, Culloden</p>
+                  <p className="contact__map-sub">Inverness, IV2 7WB</p>
+                  <a href="https://maps.google.com/?q=1+Barn+Church+Road+Culloden+Inverness+IV2+7WB" target="_blank" rel="noreferrer" className="btn btn-outline contact__map-btn">Open in Google Maps</a>
                 </div>
                 <div className="contact__map-grid">{Array(48).fill(0).map((_, i) => <div key={i} className="contact__map-cell" />)}</div>
               </div>

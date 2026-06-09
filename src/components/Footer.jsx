@@ -77,7 +77,7 @@ export default function Footer() {
           <div className="footer__col">
             <h4 className="footer__col-title">Contact</h4>
             <ul className="footer__contact-list">
-              <li><FiMapPin className="footer__contact-icon" /><span>45 Regent Street, London, UK</span></li>
+              <li><FiMapPin className="footer__contact-icon" /><span>1 Barn Church Road, Culloden, Inverness, IV2 7WB</span></li>
               <li><FiPhone className="footer__contact-icon" /><span>+44 7823 637286</span></li>
               <li><FiMail className="footer__contact-icon" /><span>info@fergusonautosales.com</span></li>
             </ul>

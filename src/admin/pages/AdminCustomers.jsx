@@ -1,15 +1,6 @@
 import { useState } from 'react'
 
-const initialCustomers = [
-  { id: 1, name: 'James Harrison', email: 'james@email.com', phone: '+44 7700 900123', location: 'London, UK', orders: 3, spent: 185000, joined: 'Jan 2024', status: 'VIP', lastActivity: '2 days ago' },
-  { id: 2, name: 'Sarah Mitchell', email: 'sarah@email.com', phone: '+44 7700 900456', location: 'Manchester, UK', orders: 1, spent: 52000, joined: 'Mar 2025', status: 'Active', lastActivity: 'Today' },
-  { id: 3, name: 'David Okafor', email: 'david@email.com', phone: '+44 7700 900789', location: 'Birmingham, UK', orders: 2, spent: 141200, joined: 'Nov 2024', status: 'VIP', lastActivity: '1 day ago' },
-  { id: 4, name: 'Emma Thompson', email: 'emma@email.com', phone: '+44 7700 900321', location: 'Leeds, UK', orders: 1, spent: 96400, joined: 'Feb 2025', status: 'Active', lastActivity: '3 days ago' },
-  { id: 5, name: 'Mark Wilson', email: 'mark@email.com', phone: '+44 7700 900654', location: 'Bristol, UK', orders: 1, spent: 55400, joined: 'Apr 2025', status: 'Active', lastActivity: '1 week ago' },
-  { id: 6, name: 'Priya Sharma', email: 'priya@email.com', phone: '+44 7700 900987', location: 'Coventry, UK', orders: 1, spent: 88000, joined: 'May 2025', status: 'New', lastActivity: 'Today' },
-  { id: 7, name: 'Chris Brown', email: 'chris@email.com', phone: '+44 7700 900111', location: 'London, UK', orders: 4, spent: 392000, joined: 'Jun 2023', status: 'VIP', lastActivity: '5 days ago' },
-  { id: 8, name: 'Fatima Al-Hassan', email: 'fatima@email.com', phone: '+44 7700 900222', location: 'Edinburgh, UK', orders: 0, spent: 0, joined: 'Jun 2026', status: 'New', lastActivity: 'Today' },
-]
+const initialCustomers = []
 
 const statusColor = (s) => {
   if (s === 'VIP') return 'yellow'

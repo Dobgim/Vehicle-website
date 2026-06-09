@@ -1,34 +1,21 @@
 import { useState } from 'react'
 
 const stats = [
-  { icon: '🚗', label: 'Total Inventory', value: '47', change: '+3 this week', up: true, color: '#e50914' },
-  { icon: '📦', label: 'Active Orders', value: '12', change: '+2 today', up: true, color: '#f5c518' },
-  { icon: '💷', label: 'Monthly Revenue', value: '£284K', change: '+18% vs last month', up: true, color: '#00b894' },
-  { icon: '👥', label: 'Total Customers', value: '389', change: '+24 this month', up: true, color: '#1e50ff' },
-  { icon: '💬', label: 'New Messages', value: '5', change: '3 unread', up: false, color: '#a29bfe' },
-  { icon: '⭐', label: 'Avg. Rating', value: '4.8', change: '+0.2 this quarter', up: true, color: '#fd79a8' },
+  { icon: '🚗', label: 'Total Inventory', value: '0', change: 'No change', up: true, color: '#e50914' },
+  { icon: '📦', label: 'Active Orders', value: '0', change: 'No change', up: true, color: '#f5c518' },
+  { icon: '💷', label: 'Monthly Revenue', value: '£0', change: 'No change', up: true, color: '#00b894' },
+  { icon: '👥', label: 'Total Customers', value: '0', change: 'No change', up: true, color: '#1e50ff' },
+  { icon: '💬', label: 'New Messages', value: '0', change: 'No messages', up: false, color: '#a29bfe' },
+  { icon: '⭐', label: 'Avg. Rating', value: '5.0', change: 'No reviews', up: true, color: '#fd79a8' },
 ]
 
-const recentOrders = [
-  { id: 'ORD-001', customer: 'James Harrison', car: '2023 BMW M5', amount: '£68,500', status: 'Confirmed', date: '09 Jun 2026' },
-  { id: 'ORD-002', customer: 'Sarah Mitchell', car: '2022 Mercedes GLE', amount: '£52,000', status: 'Pending', date: '09 Jun 2026' },
-  { id: 'ORD-003', customer: 'David Okafor', car: '2024 Porsche Cayenne', amount: '£89,200', status: 'Processing', date: '08 Jun 2026' },
-  { id: 'ORD-004', customer: 'Emma Thompson', car: '2023 Audi Q7', amount: '£61,000', status: 'Delivered', date: '07 Jun 2026' },
-  { id: 'ORD-005', customer: 'Mark Wilson', car: '2022 Land Rover Defender', amount: '£55,400', status: 'Confirmed', date: '06 Jun 2026' },
-]
+const recentOrders = []
 
-const activity = [
-  { text: 'New order placed by James Harrison for BMW M5', time: '2 min ago', color: '#00b894' },
-  { text: 'Sarah Mitchell submitted a test drive request for Mercedes GLE', time: '15 min ago', color: '#f5c518' },
-  { text: 'New message received from David Okafor', time: '1 hr ago', color: '#a29bfe' },
-  { text: '2024 Porsche Cayenne listing updated — price revised to £89,200', time: '2 hr ago', color: '#e50914' },
-  { text: 'Emma Thompson left a 5★ review', time: '3 hr ago', color: '#fd79a8' },
-  { text: 'Monthly revenue report generated for May 2026', time: '5 hr ago', color: '#1e50ff' },
-]
+const activity = []
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const BAR_DATA = [60, 85, 70, 90, 75, 110, 95, 130, 115, 140, 125, 160]
-const maxBar = Math.max(...BAR_DATA)
+const BAR_DATA = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+const maxBar = 1
 
 const statusColor = (s) => {
   if (s === 'Confirmed') return 'green'
