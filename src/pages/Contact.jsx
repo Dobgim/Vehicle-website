@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FiMail, FiPhone, FiMapPin, FiClock, FiSend, FiCheck, FiMessageSquare } from '../components/Icons'
+import { supabase } from '../supabaseClient'
 import heroBgImg from '../assets/cars/car_bmw.png'
 import './Contact.css'
 
@@ -40,11 +41,39 @@ export default function Contact() {
     if (errors[name]) setErrors(p => ({ ...p, [name]: '' }))
   }
 
-  const handleSubmit = (e) => {
+  const getTag = (subject) => {
+    if (subject === 'Vehicle Inquiry') return 'Inquiry'
+    if (subject === 'Test Drive Booking') return 'Test Drive'
+    if (subject === 'Financing & Payment') return 'Finance'
+    if (subject === 'Trade-In Valuation') return 'Trade-In'
+    return 'General'
+  }
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!validate()) return
     setLoading(true)
-    setTimeout(() => { setLoading(false); setSubmitted(true) }, 1800)
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .insert([{
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          subject: form.subject,
+          message: form.message,
+          tag: getTag(form.subject),
+          read: false,
+          replied: false
+        }])
+      if (error) throw error
+      setSubmitted(true)
+    } catch (err) {
+      console.error('Error saving message to database:', err)
+      alert('Failed to send message. Please check your internet connection and try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (

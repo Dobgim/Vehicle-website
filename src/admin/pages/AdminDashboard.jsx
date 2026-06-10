@@ -1,21 +1,8 @@
-import { useState } from 'react'
-
-const stats = [
-  { icon: '🚗', label: 'Total Inventory', value: '0', change: 'No change', up: true, color: '#e50914' },
-  { icon: '📦', label: 'Active Orders', value: '0', change: 'No change', up: true, color: '#f5c518' },
-  { icon: '💷', label: 'Monthly Revenue', value: '£0', change: 'No change', up: true, color: '#00b894' },
-  { icon: '👥', label: 'Total Customers', value: '0', change: 'No change', up: true, color: '#1e50ff' },
-  { icon: '💬', label: 'New Messages', value: '0', change: 'No messages', up: false, color: '#a29bfe' },
-  { icon: '⭐', label: 'Avg. Rating', value: '5.0', change: 'No reviews', up: true, color: '#fd79a8' },
-]
-
-const recentOrders = []
-
-const activity = []
+import { useState, useEffect } from 'react'
+import { useCarStore } from '../../context/CarStore'
+import { supabase } from '../../supabaseClient'
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const BAR_DATA = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-const maxBar = 1
 
 const statusColor = (s) => {
   if (s === 'Confirmed') return 'green'
@@ -26,6 +13,121 @@ const statusColor = (s) => {
 }
 
 export default function AdminDashboard({ navigate }) {
+  const { cars, loading: carsLoading } = useCarStore()
+  const [orders, setOrders] = useState([])
+  const [messages, setMessages] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setLoading(true)
+        // Fetch all orders
+        const { data: ords, error: ordsErr } = await supabase
+          .from('orders')
+          .select('*')
+          .order('created_at', { ascending: false })
+        if (ordsErr) throw ordsErr
+
+        // Fetch all messages
+        const { data: msgs, error: msgsErr } = await supabase
+          .from('messages')
+          .select('*')
+          .order('created_at', { ascending: false })
+        if (msgsErr) throw msgsErr
+
+        if (ords) setOrders(ords)
+        if (msgs) setMessages(msgs)
+      } catch (err) {
+        console.error('Error loading admin dashboard stats:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    loadData()
+  }, [])
+
+  if (loading || carsLoading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          border: '3px solid rgba(255,255,255,0.08)',
+          borderTopColor: '#e50914',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    )
+  }
+
+  // Calculate stats dynamically
+  const completedOrders = orders.filter(o => o.status === 'Delivered' || o.status === 'Confirmed')
+  const totalRevenue = completedOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0)
+
+  const currentMonthStr = new Date().toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) // e.g. "Jun 2026"
+  const currentMonthOrders = completedOrders.filter(o => o.date && o.date.includes(currentMonthStr))
+  const monthlyRevenue = currentMonthOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0)
+
+  const uniqueCustomers = new Set(orders.map(o => o.email || o.customer))
+  const totalCustomers = uniqueCustomers.size
+
+  const newMessagesCount = messages.filter(m => !m.read).length
+
+  const avgRating = cars.length > 0
+    ? (cars.reduce((sum, c) => sum + Number(c.rating || 0), 0) / cars.length).toFixed(1)
+    : '5.0'
+
+  const activeOrdersCount = orders.filter(o => o.status === 'Pending' || o.status === 'Processing' || o.status === 'Confirmed').length
+
+  const statsList = [
+    { icon: '🚗', label: 'Total Inventory', value: cars.length, change: `${cars.filter(c => c.status === 'Available').length} available`, up: true, color: '#e50914' },
+    { icon: '📦', label: 'Active Orders', value: activeOrdersCount, change: `${orders.filter(o => o.status === 'Pending').length} pending`, up: true, color: '#f5c518' },
+    { icon: '💷', label: 'Monthly Revenue', value: `£${(monthlyRevenue / 1000).toFixed(1)}K`, change: `£${(totalRevenue / 1000).toFixed(1)}K total`, up: true, color: '#00b894' },
+    { icon: '👥', label: 'Total Customers', value: totalCustomers, change: 'Across all time', up: true, color: '#1e50ff' },
+    { icon: '💬', label: 'New Messages', value: newMessagesCount, change: `${messages.filter(m => !m.read).length} unread`, up: false, color: '#a29bfe' },
+    { icon: '⭐', label: 'Avg. Rating', value: avgRating, change: 'From user reviews', up: true, color: '#fd79a8' },
+  ]
+
+  // Chart data for 2026 (or current year)
+  const currentYear = new Date().getFullYear().toString()
+  const BAR_DATA = MONTHS.map(m => {
+    const monthOrders = completedOrders.filter(o => o.date && o.date.includes(`${m} ${currentYear}`))
+    const rev = monthOrders.reduce((sum, o) => sum + Number(o.amount || 0), 0)
+    return rev / 1000 // In thousands (£K)
+  })
+  const maxBar = Math.max(...BAR_DATA, 1)
+
+  // Dynamic Activity Feed
+  const activityList = []
+  orders.slice(0, 5).forEach(o => {
+    activityList.push({
+      text: `📦 New order ${o.id} placed by ${o.customer} (£${Number(o.amount).toLocaleString()})`,
+      time: o.date,
+      timestamp: new Date(o.created_at || Date.now()).getTime(),
+      color: '#f5c518'
+    })
+  })
+  messages.slice(0, 5).forEach(m => {
+    activityList.push({
+      text: `💬 Message from ${m.name}: "${m.subject}"`,
+      time: new Date(m.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+      timestamp: new Date(m.created_at || Date.now()).getTime(),
+      color: '#a29bfe'
+    })
+  })
+  activityList.sort((a, b) => b.timestamp - a.timestamp)
+  const recentActivity = activityList.slice(0, 5)
+
+  const recentOrdersList = orders.slice(0, 5)
+
   return (
     <div>
       {/* Welcome Banner */}
@@ -46,7 +148,7 @@ export default function AdminDashboard({ navigate }) {
             👋 Good day, Admin
           </h2>
           <p style={{ margin: 0, fontSize: 13, color: 'rgba(255,255,255,0.45)' }}>
-            Here's what's happening at Ferguson Auto Sales today
+            Here's what's happening at Ferguson Auto Sales live today
           </p>
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
@@ -57,7 +159,7 @@ export default function AdminDashboard({ navigate }) {
 
       {/* Stats */}
       <div className="adm-stat-grid">
-        {stats.map((s, i) => (
+        {statsList.map((s, i) => (
           <div className="adm-stat" key={i}>
             <span className="adm-stat__icon">{s.icon}</span>
             <span className="adm-stat__value">{s.value}</span>
@@ -74,7 +176,7 @@ export default function AdminDashboard({ navigate }) {
       <div className="adm-two-col">
         <div className="adm-section">
           <div className="adm-section__head">
-            <h3 className="adm-section__title">📈 Revenue Overview — 2026</h3>
+            <h3 className="adm-section__title">📈 Revenue Overview — {currentYear}</h3>
             <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>£K / month</span>
           </div>
           <div className="adm-section__body">
@@ -84,7 +186,7 @@ export default function AdminDashboard({ navigate }) {
                   <div
                     className={`adm-bar ${i === 5 || i === 11 ? 'adm-bar--gold' : ''}`}
                     style={{ height: `${(v / maxBar) * 140}px`, width: '100%' }}
-                    title={`${MONTHS[i]}: £${v}K`}
+                    title={`${MONTHS[i]}: £${v.toFixed(1)}K`}
                   />
                   <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.3)' }}>{MONTHS[i]}</span>
                 </div>
@@ -96,17 +198,21 @@ export default function AdminDashboard({ navigate }) {
         <div className="adm-section">
           <div className="adm-section__head">
             <h3 className="adm-section__title">🔔 Recent Activity</h3>
-            <button className="adm-btn adm-btn--outline adm-btn--sm">See All</button>
+            <button className="adm-btn adm-btn--outline adm-btn--sm" onClick={() => navigate('orders')}>See All</button>
           </div>
           <div className="adm-section__body">
             <div className="adm-activity">
-              {activity.map((a, i) => (
-                <div className="adm-activity__item" key={i}>
-                  <div className="adm-activity__dot" style={{ background: a.color }} />
-                  <span className="adm-activity__text">{a.text}</span>
-                  <span className="adm-activity__time">{a.time}</span>
-                </div>
-              ))}
+              {recentActivity.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '20px 0', color: 'rgba(255,255,255,0.3)', fontSize: 13 }}>No recent activity.</div>
+              ) : (
+                recentActivity.map((a, i) => (
+                  <div className="adm-activity__item" key={i}>
+                    <div className="adm-activity__dot" style={{ background: a.color }} />
+                    <span className="adm-activity__text">{a.text}</span>
+                    <span className="adm-activity__time">{a.time}</span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -130,16 +236,24 @@ export default function AdminDashboard({ navigate }) {
             </tr>
           </thead>
           <tbody>
-            {recentOrders.map(o => (
-              <tr key={o.id}>
-                <td><span style={{ color: '#f5c518', fontWeight: 600 }}>{o.id}</span></td>
-                <td>{o.customer}</td>
-                <td style={{ color: 'rgba(255,255,255,0.6)' }}>{o.car}</td>
-                <td style={{ color: '#00b894', fontWeight: 700 }}>{o.amount}</td>
-                <td style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>{o.date}</td>
-                <td><span className={`adm-badge adm-badge--${statusColor(o.status)}`}>{o.status}</span></td>
+            {recentOrdersList.length === 0 ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: 'center', padding: 20, color: 'rgba(255,255,255,0.3)' }}>
+                  No orders placed yet.
+                </td>
               </tr>
-            ))}
+            ) : (
+              recentOrdersList.map(o => (
+                <tr key={o.id}>
+                  <td><span style={{ color: '#f5c518', fontWeight: 600 }}>{o.id}</span></td>
+                  <td>{o.customer}</td>
+                  <td style={{ color: 'rgba(255,255,255,0.6)' }}>{o.car}</td>
+                  <td style={{ color: '#00b894', fontWeight: 700 }}>£{Number(o.amount).toLocaleString(undefined, { maximumFractionDigits: 2 })}</td>
+                  <td style={{ color: 'rgba(255,255,255,0.4)', fontSize: 12 }}>{o.date}</td>
+                  <td><span className={`adm-badge adm-badge--${statusColor(o.status)}`}>{o.status}</span></td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

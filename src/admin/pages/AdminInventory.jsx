@@ -25,6 +25,7 @@ export default function AdminInventory() {
   const [editId, setEditId] = useState(null)
   const [previewImg, setPreviewImg] = useState(null)
   const [success, setSuccess] = useState('')
+  const [saving, setSaving] = useState(false)
   const fileRef = useRef()
 
   const filtered = cars.filter(c => {
@@ -74,7 +75,7 @@ export default function AdminInventory() {
     reader.readAsDataURL(file)
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.name.trim() || !form.price) {
       alert('Please fill in Vehicle Name and Price at minimum.')
       return
@@ -89,22 +90,33 @@ export default function AdminInventory() {
     }
     delete carData._imageData
 
-    if (modal === 'add') {
-      addCar(carData)
-      setSuccess(`✅ "${form.name}" has been added to the website shop!`)
-    } else {
-      updateCar(editId, carData)
-      setSuccess(`✅ "${form.name}" has been updated successfully!`)
+    try {
+      setSaving(true)
+      if (modal === 'add') {
+        await addCar(carData)
+        setSuccess(`✅ "${form.name}" has been added to the website shop!`)
+      } else {
+        await updateCar(editId, carData)
+        setSuccess(`✅ "${form.name}" has been updated successfully!`)
+      }
+      closeModal()
+      setTimeout(() => setSuccess(''), 4000)
+    } catch (err) {
+      console.error('Error saving car listing:', err)
+    } finally {
+      setSaving(false)
     }
-    closeModal()
-    setTimeout(() => setSuccess(''), 4000)
   }
 
-  const handleDelete = (id, name) => {
+  const handleDelete = async (id, name) => {
     if (window.confirm(`Remove "${name}" from inventory?`)) {
-      deleteCar(id)
-      setSuccess(`🗑️ "${name}" removed from inventory.`)
-      setTimeout(() => setSuccess(''), 3000)
+      try {
+        await deleteCar(id)
+        setSuccess(`🗑️ "${name}" removed from inventory.`)
+        setTimeout(() => setSuccess(''), 3000)
+      } catch (err) {
+        console.error('Error deleting car:', err)
+      }
     }
   }
 
@@ -179,7 +191,7 @@ export default function AdminInventory() {
         </button>
         <button className="adm-btn adm-btn--outline adm-btn--sm"
           style={{ color: '#f5c518', borderColor: 'rgba(245,197,24,0.3)' }}
-          onClick={() => { if (window.confirm('Reset inventory to default cars? Admin-added cars will be removed.')) resetToDefaults() }}>
+          onClick={resetToDefaults}>
           ↩️ Reset to Defaults
         </button>
         <button className="adm-btn adm-btn--primary" onClick={openAdd}>+ Post Car to Website</button>
@@ -378,8 +390,8 @@ export default function AdminInventory() {
             </div>
 
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-              <button className="adm-btn adm-btn--primary" onClick={handleSave} style={{ flex: 1, justifyContent: 'center' }}>
-                {modal === 'add' ? '🚀 Post to Website Now' : '💾 Save Changes'}
+              <button className="adm-btn adm-btn--primary" onClick={handleSave} disabled={saving} style={{ flex: 1, justifyContent: 'center' }}>
+                {saving ? 'Processing...' : modal === 'add' ? '🚀 Post to Website Now' : '💾 Save Changes'}
               </button>
               <button className="adm-btn adm-btn--outline" onClick={closeModal}>Cancel</button>
             </div>

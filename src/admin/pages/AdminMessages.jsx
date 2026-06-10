@@ -1,38 +1,112 @@
-import { useState } from 'react'
-
-const initialMessages = []
+import { useState, useEffect } from 'react'
+import { supabase } from '../../supabaseClient'
 
 const tagColors = { Inquiry: 'blue', 'Test Drive': 'green', Finance: 'yellow', 'Trade-In': 'red', General: 'gray' }
 
 export default function AdminMessages() {
-  const [messages, setMessages] = useState(initialMessages)
+  const [messages, setMessages] = useState([])
+  const [loading, setLoading] = useState(true)
   const [selected, setSelected] = useState(null)
   const [reply, setReply] = useState('')
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('All')
 
-  const select = (m) => {
+  // Fetch messages from Supabase
+  useEffect(() => {
+    async function fetchMessages() {
+      try {
+        setLoading(true)
+        const { data, error } = await supabase
+          .from('messages')
+          .select('*')
+          .order('created_at', { ascending: false })
+        if (error) throw error
+        if (data) {
+          const mapped = data.map(m => ({
+            ...m,
+            time: new Date(m.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }),
+            date: new Date(m.created_at).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+          }))
+          setMessages(mapped)
+        }
+      } catch (err) {
+        console.error('Error fetching messages from Supabase:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchMessages()
+  }, [])
+
+  const select = async (m) => {
     setSelected(m)
-    setMessages(p => p.map(msg => msg.id === m.id ? { ...msg, read: true } : msg))
     setReply('')
+    
+    if (!m.read) {
+      try {
+        const { error } = await supabase
+          .from('messages')
+          .update({ read: true })
+          .eq('id', m.id)
+        if (error) throw error
+        
+        setMessages(p => p.map(msg => msg.id === m.id ? { ...msg, read: true } : msg))
+        setSelected(prev => prev && prev.id === m.id ? { ...prev, read: true } : prev)
+      } catch (err) {
+        console.error('Error marking message as read in database:', err)
+      }
+    }
   }
 
-  const sendReply = () => {
+  const sendReply = async () => {
     if (!reply.trim()) return
-    setMessages(p => p.map(msg => msg.id === selected.id ? { ...msg, replied: true } : msg))
-    setSelected(p => ({ ...p, replied: true }))
-    setReply('')
-    alert('Reply sent successfully!')
+    try {
+      const { error } = await supabase
+        .from('messages')
+        .update({ replied: true })
+        .eq('id', selected.id)
+      
+      if (error) throw error
+      
+      setMessages(p => p.map(msg => msg.id === selected.id ? { ...msg, replied: true } : msg))
+      setSelected(p => ({ ...p, replied: true }))
+      setReply('')
+      alert('Reply status updated in database successfully!')
+    } catch (err) {
+      console.error('Error marking message as replied in database:', err)
+      alert('Failed to update reply status.')
+    }
   }
 
   const filtered = messages.filter(m => {
     const q = search.toLowerCase()
-    const matchQ = m.name.toLowerCase().includes(q) || m.subject.toLowerCase().includes(q)
+    const matchQ = (m.name || '').toLowerCase().includes(q) || (m.subject || '').toLowerCase().includes(q)
     const matchF = filter === 'All' || (filter === 'Unread' && !m.read) || (filter === 'Replied' && m.replied) || m.tag === filter
     return matchQ && matchF
   })
 
   const unread = messages.filter(m => !m.read).length
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '300px' }}>
+        <div style={{
+          width: '32px',
+          height: '32px',
+          border: '3px solid rgba(255,255,255,0.08)',
+          borderTopColor: '#e50914',
+          borderRadius: '50%',
+          animation: 'spin 1s linear infinite'
+        }} />
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    )
+  }
 
   return (
     <div>
@@ -65,27 +139,33 @@ export default function AdminMessages() {
             {['All','Unread','Replied','Inquiry','Test Drive','Finance','Trade-In','General'].map(f => <option key={f}>{f}</option>)}
           </select>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8, overflowY: 'auto', flex: 1 }}>
-            {filtered.map(m => (
-              <div key={m.id}
-                onClick={() => select(m)}
-                style={{
-                  background: selected?.id === m.id ? 'rgba(229,9,20,0.1)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${selected?.id === m.id ? 'rgba(229,9,20,0.3)' : 'rgba(255,255,255,0.07)'}`,
-                  borderRadius: 10, padding: 14, cursor: 'pointer', transition: 'all 0.15s',
-                }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
-                  <span style={{ fontWeight: m.read ? 500 : 700, color: '#fff', fontSize: 13 }}>{m.name}</span>
-                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>{m.time}</span>
-                </div>
-                <div style={{ fontSize: 12, color: '#f5c518', fontWeight: 600, marginBottom: 4 }}>{m.subject}</div>
-                <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</div>
-                <div style={{ display: 'flex', gap: 6, marginTop: 8, alignItems: 'center' }}>
-                  <span className={`adm-badge adm-badge--${tagColors[m.tag] || 'gray'}`} style={{ fontSize: 10 }}>{m.tag}</span>
-                  {!m.read && <span className="adm-badge adm-badge--red" style={{ fontSize: 10 }}>New</span>}
-                  {m.replied && <span className="adm-badge adm-badge--green" style={{ fontSize: 10 }}>Replied</span>}
-                </div>
+            {filtered.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: 20, color: 'rgba(255,255,255,0.25)', fontSize: 13 }}>
+                No messages found.
               </div>
-            ))}
+            ) : (
+              filtered.map(m => (
+                <div key={m.id}
+                  onClick={() => select(m)}
+                  style={{
+                    background: selected?.id === m.id ? 'rgba(229,9,20,0.1)' : 'rgba(255,255,255,0.03)',
+                    border: `1px solid ${selected?.id === m.id ? 'rgba(229,9,20,0.3)' : 'rgba(255,255,255,0.07)'}`,
+                    borderRadius: 10, padding: 14, cursor: 'pointer', transition: 'all 0.15s',
+                  }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 4 }}>
+                    <span style={{ fontWeight: m.read ? 500 : 700, color: '#fff', fontSize: 13 }}>{m.name}</span>
+                    <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.35)' }}>{m.time}</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: '#f5c518', fontWeight: 600, marginBottom: 4 }}>{m.subject}</div>
+                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.4)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{m.message}</div>
+                  <div style={{ display: 'flex', gap: 6, marginTop: 8, alignItems: 'center' }}>
+                    <span className={`adm-badge adm-badge--${tagColors[m.tag] || 'gray'}`} style={{ fontSize: 10 }}>{m.tag}</span>
+                    {!m.read && <span className="adm-badge adm-badge--red" style={{ fontSize: 10 }}>New</span>}
+                    {m.replied && <span className="adm-badge adm-badge--green" style={{ fontSize: 10 }}>Replied</span>}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -97,7 +177,7 @@ export default function AdminMessages() {
                 <div>
                   <h3 className="adm-section__title">{selected.subject}</h3>
                   <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', marginTop: 2 }}>
-                    From: {selected.name} &lt;{selected.email}&gt; · {selected.date}
+                    From: {selected.name} &lt;{selected.email}&gt; {selected.phone && `· ${selected.phone}`} · {selected.date}
                   </div>
                 </div>
                 <span className={`adm-badge adm-badge--${tagColors[selected.tag] || 'gray'}`}>{selected.tag}</span>
@@ -118,9 +198,11 @@ export default function AdminMessages() {
                     style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 10, padding: '12px 14px', color: '#fff', fontFamily: 'inherit', fontSize: 13.5, outline: 'none', resize: 'vertical', boxSizing: 'border-box' }}
                   />
                   <div style={{ display: 'flex', gap: 10, marginTop: 10 }}>
-                    <button className="adm-btn adm-btn--primary" onClick={sendReply}>📤 Send Reply</button>
+                    <button className="adm-btn adm-btn--primary" onClick={sendReply}>📤 Mark Replied</button>
                     <a href={`mailto:${selected.email}`} className="adm-btn adm-btn--outline" style={{ textDecoration: 'none' }}>📧 Open Email Client</a>
-                    <a href={`https://wa.me/447823637286?text=Hi ${selected.name}`} target="_blank" rel="noreferrer" className="adm-btn adm-btn--gold" style={{ textDecoration: 'none' }}>💬 WhatsApp</a>
+                    {selected.phone && (
+                      <a href={`https://wa.me/${selected.phone.replace(/\D/g, '')}?text=Hi ${selected.name}`} target="_blank" rel="noreferrer" className="adm-btn adm-btn--gold" style={{ textDecoration: 'none' }}>💬 WhatsApp</a>
+                    )}
                   </div>
                 </div>
               </div>
