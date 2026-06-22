@@ -54,6 +54,7 @@ export default function Contact() {
     if (!validate()) return
     setLoading(true)
     try {
+      // 1. Save to Supabase (so it is visible in the Admin Panel)
       const { error } = await supabase
         .from('messages')
         .insert([{
@@ -67,6 +68,38 @@ export default function Contact() {
           replied: false
         }])
       if (error) throw error
+
+      // 2. Send via Web3Forms (to receive message in owner's email)
+      const web3Key = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
+      if (web3Key && web3Key !== 'your_web3forms_access_key_here') {
+        try {
+          const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              access_key: web3Key,
+              subject: `New Contact Message: ${form.subject} - ${form.name}`,
+              from_name: 'Ferguson Auto Sales Contact Form',
+              name: form.name,
+              email: form.email,
+              phone: form.phone || 'Not provided',
+              message: form.message
+            })
+          })
+          const resData = await response.json()
+          if (!response.ok || !resData.success) {
+            console.error('Web3Forms email delivery failed:', resData)
+          }
+        } catch (mailErr) {
+          console.error('Failed to send email via Web3Forms:', mailErr)
+        }
+      } else {
+        console.warn('Web3Forms Access Key is not configured. Email notification skipped.')
+      }
+
       setSubmitted(true)
     } catch (err) {
       console.error('Error saving message to database:', err)
